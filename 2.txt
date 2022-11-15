@@ -1,0 +1,40 @@
+2
+Account(Acc_no, branch_name,balance)
+branch(branch_name,branch_city,assets)
+customer(cust_name,cust_street,cust_city)
+Depositor(cust_name,acc_no)
+Loan(loan_no,branch_name,amount)
+Borrower(cust_name,loan_no)
+
+----------------------------------------------------------------------------------------------
+CREATE TABLE Account(Acc_no NUMBER(10) NOT NULL PRIMARY KEY, branch_name VARCHAR2(20),balance NUMBER(10));
+CREATE TABLE branch(branch_name VARCHAR2(10),branch_city VARCHAR2(10),assets NUMBER(10));
+CREATE TABLE customer(cust_name VARCHAR2(20) NOT NULL,cust_street VARCHAR2(20),cust_city VARCHAR2(20));
+CREATE TABLE Depositor(cust_name VARCHAR2(20),acc_no NUMBER(10), FOREIGN KEY(acc_no) REFERENCES Account(Acc_no));
+CREATE TABLE Loan(loan_no NUMBER(10) NOT NULL PRIMARY KEY,branch_name VARCHAR2(20),amount NUMBER(10) NOT NULL);
+CREATE TABLE Borrower(cust_name VARCHAR2(20),loan_no NUMBER(10), FOREIGN KEY(loan_no) REFERENCES Loan(loan_no));
+
+INSERT INTO Account VALUES(1,'B1',10000);
+INSERT INTO branch VALUES('B1','C1',10);
+INSERT INTO customer VALUES('CN1','CS1','C1');
+INSERT INTO Depositor VALUES('CN1','1');
+INSERT INTO Loan VALUES(2,'B1',100000);
+INSERT INTO Borrower VALUES('CN1',2);
+---------------------------------------------------------------------------------------------------------------------
+Solve following query:
+Create above tables with appropriate constraints like primary key, foreign key, check
+constrains, not null etc.
+a) Find the names of all branches in loan relation.
+b) Find all loan numbers for loans made at 'Shivaji Nagar' Branch with loan amount > 12000.
+c) Find all customers who have a loan from bank. Find their names,loan_no and loan amount.
+d) List all customers in alphabetical order who have loan from Akurdi branch.
+e) Find all customers who have an account or loan or both at bank.
+f) Find all customers who have both account and loan at bank.
+g) Find all customers who have account but no loan at the bank.
+h) Find average account balance at Akurdi branch.
+i) Find the branches where average account balance > 12000.
+j) Find number of tuples in customer relation.
+k) Calculate total loan amount given by bank.
+l) Delete all loans with loan amount between 1300 and 1500.
+m) Delete all tuples at every branch located in Nigdi.
+n) Create sequence roll_seq and use in student table for roll_no column.

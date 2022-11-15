@@ -1,0 +1,33 @@
+// Create a student collection consisting of fields like Roll No, name, class, marks, sports etc
+
+db.createCollection('student')
+
+db.student.insert([
+{RollNo : 1,name : 'a', classs : 'TECompA', marks : 80, sports: 'football'},  
+{RollNo : 2,name : 'b', classs : 'TECompA', marks : 75, sports: 'football'},  
+{RollNo : 8,name : 'h', classs : 'TECompA', marks : 90, sports: 'cricket'},  
+{RollNo : 9,name : 'i', classs : 'TECompA', marks : 70, sports: 'football'},  
+{RollNo : 10,name : 'j', classs : 'TECompA', marks : 25, sports: 'cricket'},
+{RollNo : 3,name : 'c', classs : 'TECompB', marks : 95, sports: 'football'},
+{RollNo : 7,name : 'g', classs : 'TECompB', marks : 30, sports: 'cricket'}, 
+{RollNo : 5,name : 'e', classs : 'TECompB', marks : 70, sports: 'cricket'}, 
+{RollNo : 4,name : 'd', classs : 'TECompB', marks : 86, sports: 'football'},  
+{RollNo : 6,name : 'f', classs : 'TECompB', marks : 92, sports: 'cricket'}
+])
+
+// ⦁	Display the first 5 toppers ;of TE
+db.student.find({}).sort({marks:-1}).limit(5).pretty()
+// ⦁	Display marks of topper of each division
+db.student.aggregate([{$group : {_id : "$classs", topper : {$max : "$marks"}}}]).pretty()
+// ⦁	Display the average marks of each division
+db.student.aggregate([{$group : {_id : "$classs", average : {$avg : "$marks"}}}]).pretty()
+// ⦁	Display the rollcall of TEComp A
+db.student.find({classs:'TECompB'},{_id:0,RollNo:1}).pretty()
+// ⦁	Display list of fail students from TE Comp A
+db.student.find({marks:{$lt:35}},{_id:0,name:1}).pretty()
+// ⦁	Display Name, Class and Marks of all students
+db.student.find({},{_id:0,name : 1, classs : 1, marks : 1}).pretty()
+// ⦁	Display list of students who play football
+db.student.find({sports:'football'},{_id:0,name : 1}).pretty()
+
+

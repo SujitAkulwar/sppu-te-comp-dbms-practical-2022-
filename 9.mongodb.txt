@@ -1,0 +1,121 @@
+9 MongoDB : CRUD operations, Create collection Employee consisting of Emp_id, Emp_Name, Emp_salary, Emp_Dept. 
+Insert 10 Documents in the collection.
+Find the employees whose salary is greater than 50000 Rs.
+Increase the salary of Smith by 5000 Rs
+Display the information of employees working in Marketing  department.with less than 45000 salary .
+Display first five highest paid employees
+Delete Employee with Id ‘E1007’
+Create an Index on Emp_Id field , compare the time require to search Emp_id ‘E10008’ before  and after creating an index. 
+(Hint Add at least 10000 Documents)
+
+Code : 
+
+// create Collection employee
+db.createCollection("Employee")
+
+// insert into Collection employee 10 documents 
+
+db.Employee.insert([
+    {
+      Emp_id:'E1009', 
+      Emp_Name:'pritesh', 
+      Emp_salary:10000, 
+      Emp_Dept:"develop"
+    },
+    {
+      Emp_id:'E1011', 
+      Emp_Name:'nilhil', 
+      Emp_salary:100000, 
+      Emp_Dept:"design"
+    },
+    {
+      Emp_id:'E1811', 
+      Emp_Name:'sangam', 
+      Emp_salary:1000000, 
+      Emp_Dept:"develop"
+    },
+    {
+      Emp_id:'E1711', 
+      Emp_Name:'viplya', 
+      Emp_salary:1000, 
+      Emp_Dept:"design"
+    },
+    {
+      Emp_id:'E1611', 
+      Emp_Name:'nikhlya', 
+      Emp_salary:60000, 
+      Emp_Dept:"design"
+    },
+    {
+      Emp_id:'E1511', 
+      Emp_Name:'vipulesh', 
+      Emp_salary:40000, 
+      Emp_Dept:"Marketing"
+    },
+    {
+      Emp_id:'E1411', 
+      Emp_Name:'mokey', 
+      Emp_salary:6000, 
+      Emp_Dept:"design"
+    },
+    {
+      Emp_id:'E1311', 
+      Emp_Name:'tada', 
+      Emp_salary:7000, 
+      Emp_Dept:"develop"
+    },
+    {
+      Emp_id:'E1211', 
+      Emp_Name:'smith', 
+      Emp_salary:8000, 
+      Emp_Dept:"Marketing"
+    },
+    {
+      Emp_id:'E1007', 
+      Emp_Name:'viplya', 
+      Emp_salary:19000, 
+      Emp_Dept:"develop"
+    }
+  ])
+  
+  
+// salary greater than 50000
+db.Employee.find({Emp_salary:{$gt:50000}}).pretty()
+
+//increase salary of smith by 5000
+db.Employee.updateOne(
+   { Emp_Name:'smith' },
+   { $inc:{Emp_salary:5000} }
+)
+
+//Display the information of employees working in Marketing  department.with less than 45000 salary .
+db.Employee.find(
+  {
+    Emp_salary:
+    {
+      $lt:45000
+    }
+  }
+)
+
+//Display first five highest paid employees
+db.Employee.find({}).sort({Emp_salary:-1}).limit(5) 
+
+//delete employee id = E1007
+db.Employee.deleteMany({emp_id:"E1007"})
+
+//Create an Index on Emp_Id field 
+db.Employee.createIndex({Emp_Id:1})
+
+
+
+
+
+
+
+
+
+
+
+
+

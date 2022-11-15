@@ -1,0 +1,63 @@
+Q 8
+******
+create table cust_master(cust_no number,cust_name varchar2(20), qty_ordered number,order_date date,cust_addr varchar2(20));
+
+insert into cust_master values(101,'sangam',3,'10-april-2022','pune');
+insert into cust_master values(102,'Nikhil',3,'11-april-2022','pune');
+insert into cust_master values(103,'pritesh',3,'12-april-2022','pune');
+insert into cust_master values(104,'vinayak',4,'12-may-2022','pune');
+insert into cust_master values(105,'vedant',4,'14-may-2022','pune');
+insert into cust_master values(106,'Aaditya',4,'14-may-2022','mulshi');
+insert into cust_master values(107,'rahul',4,'15-may-2022','manglore');
+insert into cust_master values(108,'karan',6,'16-may-2022','Banglore');
+insert into cust_master values(109,'Ram',8,'16-june-2022','latur');
+
+select * from cust_master where cust_name like '_a%';
+
+   CUST_NO CUST_NAME            QTY_ORDERED ORDER_DAT CUST_ADDR
+---------- -------------------- ----------- --------- --------------------
+       101 sangam                         3 10-APR-22 pune
+       106 Aaditya                        4 14-MAY-22 mulshi
+       107 rahul                          4 15-MAY-22 manglore
+       108 karan                          6 16-MAY-22 Banglore
+       109 Ram                            8 16-JUN-22 latur
+
+select * from cust_master where cust_addr like 'm%';
+
+   CUST_NO CUST_NAME            QTY_ORDERED ORDER_DAT CUST_ADDR
+---------- -------------------- ----------- --------- --------------------
+       106 Aaditya                        4 14-MAY-22 mulshi
+       107 rahul                          4 15-MAY-22 manglore
+ 
+select qty_ordered from cust_master where cust_no=102 or cust_no=105 or cust_no=107 or cust_no=108;
+
+QTY_ORDERED
+-----------
+          3
+          4
+          4
+          6
+select cust_name from cust_master where cust_addr='Banglore'or cust_addr='manglore';
+
+CUST_NAME
+--------------------
+rahul
+karan
+ 
+create view customer_view as select cust_no,qty_ordered,order_date from cust_master;
+
+SQL> select * from customer_view;
+
+   CUST_NO QTY_ORDERED ORDER_DAT
+---------- ----------- ---------
+       101           3 10-APR-22
+       102           3 11-APR-22
+       103           3 12-APR-22
+       104           4 12-MAY-22
+       105           4 14-MAY-22
+       106           4 14-MAY-22
+       107           4 15-MAY-22
+       108           6 16-MAY-22
+       109           8 16-JUN-22
+
+===================================================================

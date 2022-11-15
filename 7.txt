@@ -1,0 +1,39 @@
+Q 7
+******
+create table customer_master(cust_no number,cust_name varchar2(20),dob date,address varchar2(20));
+
+create table cust_audit(cust_no number,cust_name varchar2(20),dob date,address varchar2(20));
+
+create or replace trigger master_trigger
+after
+insert or update or delete
+on customer_master for each row
+begin
+insert into cust_audit values(:old.cust_no,:old.cust_name,:old.dob,:old.address);
+insert into cust_audit values(:new.cust_no,:new.cust_name,:new.dob,:new.address);
+end;
+/
+insert into customer_master values(101,'nikhil','10-april-2003','phaltan');
+
+select * from cust_audit;
+
+   CUST_NO CUST_NAME            DOB       ADDRESS
+---------- -------------------- --------- --------------------
+
+       101 nikhil               10-APR-03 phaltan
+
+update customer_master set cust_name = 'sangu' where cu
+st_no = 101;
+
+1 row updated.
+
+select * from cust_audit;
+
+   CUST_NO CUST_NAME            DOB       ADDRESS
+---------- -------------------- --------- --------------------
+
+       101 nikhil               10-APR-03 phaltan
+       101 nikhil               10-APR-03 phaltan
+       101 sangu                10-APR-03 phaltan
+
+=======================================================================

@@ -1,0 +1,166 @@
+PL/SQL function and trigger
+Create the following table with suitable constraints.
+STUDENT( Rno, Name, TotMarks, Class)
+
+CREATE TABLE STUDENT(RNO NUMERIC(4) PRIMARY KEY,NAME VARCHAR2(20),TOTMARKS NUMERIC(10),CLASS VARCHAR2(20));
+
+INSERT INTO STUDENT VALUES(1,'A',99,NULL);
+INSERT INTO STUDENT VALUES(2,'S',90,NULL);
+INSERT INTO STUDENT VALUES(3,'D',88,NULL);
+INSERT INTO STUDENT VALUES(4,'F',80,NULL);
+INSERT INTO STUDENT VALUES(5,'G',75,NULL);
+INSERT INTO STUDENT VALUES(6,'H',65,NULL);
+INSERT INTO STUDENT VALUES(7,'J',55,NULL);
+INSERT INTO STUDENT VALUES(8,'K',45,NULL);
+INSERT INTO STUDENT VALUES(9,'L',20,NULL);
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+Write a PL/SQL function to count the number of Distinction, FirstClass,
+HigherSecondClass, Second Class and Fail students
+
+
+/////////////////////FOR totalFirstClass ///////////////////////////
+/
+CREATE OR REPLACE FUNCTION totalFirstClass 
+RETURN number IS 
+   total number(3) := 0; 
+BEGIN 
+   SELECT count(*) into total FROM STUDENT WHERE TOTMARKS >= 70; 
+   RETURN total; 
+END; 
+/ 
+/
+DECLARE 
+   c number(3); 
+BEGIN 
+   c := totalFirstClass(); 
+   dbms_output.put_line('Total no. of FirstClass : ' || c); 
+END; 
+/
+/////////////////////FOR totalHigherSecondClass ///////////////////////////
+CREATE OR REPLACE FUNCTION totalHigherSecondClass 
+RETURN number IS 
+   total number(3) := 0; 
+BEGIN 
+   SELECT count(*) into total FROM STUDENT WHERE TOTMARKS >= 60 and TOTMARKS < 70; 
+   RETURN total; 
+END; 
+/ 
+/
+DECLARE 
+   c number(3); 
+BEGIN 
+   c := totalHigherSecondClass(); 
+   dbms_output.put_line('Total no. of HigherSecondClass : ' || c); 
+END; 
+/
+/////////////////////FOR totalSecondClass  ///////////////////////////
+CREATE OR REPLACE FUNCTION totalSecondClass 
+RETURN number IS 
+   total number(3) := 0; 
+BEGIN 
+   SELECT count(*) into total FROM STUDENT WHERE TOTMARKS >= 50 and TOTMARKS < 60; 
+   RETURN total; 
+END; 
+/ 
+/
+DECLARE 
+   c number(3); 
+BEGIN 
+   c := totalSecondClass(); 
+   dbms_output.put_line('Total no. of SecondClass : ' || c); 
+END; 
+/
+/////////////////////FOR totalDistinction ///////////////////////////
+CREATE OR REPLACE FUNCTION totalDistinction 
+RETURN number IS 
+   total number(3) := 0; 
+BEGIN 
+   SELECT count(*) into total FROM STUDENT WHERE TOTMARKS >= 40 and TOTMARKS < 60; 
+   RETURN total; 
+END; 
+/ 
+/
+DECLARE 
+   c number(3); 
+BEGIN 
+   c := totalDistinction(); 
+   dbms_output.put_line('Total no. of Distinction : ' || c); 
+END; 
+/
+/////////////////////FOR totalFail ///////////////////////////
+CREATE OR REPLACE FUNCTION totalfail
+RETURN number IS 
+   total number(3) := 0; 
+BEGIN 
+   SELECT count(*) into total FROM STUDENT WHERE TOTMARKS < 40; 
+   RETURN total; 
+END; 
+/ 
+/
+DECLARE 
+   c number(3); 
+BEGIN 
+   c := totalfail(); 
+   dbms_output.put_line('Total no. of Fail : ' || c); 
+END; 
+/
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+Create table BOOKS and Write an after delete trigger on the table which will store the
+old record in the Books_LOG table
+
+SQL> create table book(book_id number primary key,book_name varchar2(20));
+SQL> create table booklog(book_id number primary key,book_name varchar2(20));
+
+//////trigger
+SQL> create or replace trigger book_transfer 
+after
+delete
+on book for each row
+begin
+insert into booklog values (:old.book_id,:old.book_name);
+end;
+/
+
+
+SQL> insert into book values(101,'sangam');
+SQL> insert into book values(102,'nikhil');
+SQL> select * from book;
+SQL> select * from booklog;
+SQL> delete from book where book_id=101;
+
+
+////////////////////////////////////////////////////////////////error/////////////////////////////////////////////////////////////////////////////////////
+DECLARE 
+	STU STUDENT%ROWTYPE;
+	SCLASS STUDENT.CLASS%type;
+	SRNO STUDENT.RNO%type; 
+	CURSOR c1 IS SELECT * FROM STUDENT;
+
+BEGIN
+FOR STU IN C1 LOOP 
+	IF (STU.TOTMARKS >= 70)THEN SCLASS:='FirstClass';
+	ELSIF (STU.TOTMARKS >= 60 AND STU.TOTMARKS < 70)
+		THEN SCLASS :='HigherSecondClass';
+	ELSIF (STU.TOTMARKS >= 50 AND STU.TOTMARKS < 60)
+		THEN SCLASS :='Second Class';
+	ELSIF (STU.TOTMARKS >= 40 AND STU.TOTMARKS < 50)
+		THEN SCLASS :='Distinction';
+	ELSIF (STU.TOTMARKS < 40 AND STU.TOTMARKS >= 0)
+		THEN SCLASS :='Fail';
+	END IF;  
+	UPDATE STUDENT SET CLASS = SCLASS WHERE STUDENT.RNO=STU.RNO;
+
+END LOOP;
+END;

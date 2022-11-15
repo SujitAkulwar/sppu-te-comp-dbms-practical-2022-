@@ -1,0 +1,40 @@
+Procedure
+Consider table Student (Roll, Name, Attendance ,Status).
+Write a PL/SQL block for following requirement and handle the exceptions. 
+Roll no. of student will be entered by user. 
+Attendance of roll no. entered by user will be checked in Stud table. 
+If attendance is less than 75% then display the message “Term not granted” 
+and set the status in stud tableas “Detained”. 
+Otherwise display message “Term granted” and set the status in stud table
+as “Not Detained”
+..................................................................................................
+create table Student(Roll number(10), Name varchar2(10), Attendance number(10),Status varchar2(50));
+insert into Student values(1,'a',80,null);
+insert into Student values(2,'b',70,null);
+insert into Student values(3,'c',60,null);
+
+create or replace procedure pro (SRoll in number)
+is
+	attend number;
+begin
+	select Attendance into attend from student where Roll=SRoll;
+	if(attend>=75)Then
+		dbms_output.put_line('Term granted');
+		update Student set Status='Not Detained' where Roll=SRoll;
+	elsif(attend<75) then
+		dbms_output.put_line('Term not granted');
+		update Student set Status='Detained' where Roll=SRoll;
+		
+	end if;
+	
+end;
+/
+DECLARE 
+	SRoll number;
+begin 
+	SRoll := &SRoll;
+	pro(SRoll);
+end;
+/
+...........................................................................................................
+ALTER TABLE Student MODIFY status varchar2(50);

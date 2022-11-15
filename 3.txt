@@ -1,0 +1,22 @@
+3
+
+SET SERVEROUTPUT ON
+create table EM(no number(3),name varchar2(10),salary numeric(10));
+create table Tracking(no number(3),name varchar2(10),salary numeric(10));
+
+insert into EM values(1,'a',100000);
+insert into EM values(2,'b',10000);
+insert into EM values(3,'c',1000);
+update EM set salary=20000 where no=1;
+
+CREATE OR REPLACE TRIGGER TRIGAINSERT
+AFTER INSERT OR UPDATE
+ON EM
+REFERENCING NEW AS NEW OLD AS OLD
+FOR EACH ROW 
+BEGIN 
+	IF(:NEW.salary < 50000) THEN
+	DBMS_OUTPUT.PUT_LINE('inserting salary less than 50000 data');
+END IF;
+END;
+/
